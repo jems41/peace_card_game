@@ -53,18 +53,18 @@ def play_round(player1_card, player2_card):
         player1_deck.append(player1_card)
         player1_deck.append(player2_card)
         print(f"Since {player1_card} beats {player2_card}, player 1 wins!")
-        #("Press enter to continue...")
+        input("Press enter to continue...")
 
     elif result == 2:
         player2_deck.append(player1_card)
         player2_deck.append(player2_card)
         print(f"Since {player2_card} beats {player1_card}, player 2 wins!")
-        #("Press enter to continue...")
+        input("Press enter to continue...")
 
     else:
         print(f"Since {player2_card} is the same rank as {player1_card}, peace will start!")
-        #time.sleep(4)
-        #("Press enter to continue...")
+        time.sleep(2)
+        input("Press enter to continue...")
         war(player1_deck, player2_deck, player1_card, player2_card)
 
 # Handle the 'war' scenario when cards are equal.
@@ -73,73 +73,88 @@ def play_round(player1_card, player2_card):
 # card takes all the cards.
 
 def war(deck1, deck2, card1, card2):
-
-
     if len(deck1) < 5 or len(deck2) < 5:
-        print("error 101: the number of cards in either decks are less than 5, cannot initiate war")
+        print("Error 101: the number of cards in either decks are less than 5, cannot initiate war")
         player1_deck.append(card1)
         player2_deck.append(card2)
 
     else:
-        
-        for i in range(4):
+        player1_card1, player1_card2, player1_card3, player1_card4 = [deck1.pop(0) for card in range(4)]
+        print(f"Player 1 draws 3 unknown cards and draws {player1_card4}!")
+        input("Press enter to continue...")
 
-            player1_card1, player1_card2, player1_card3, player1_card4 = [deck1.pop(0) for card in range(4)]
-            player1_4cards = [player1_card1, player1_card2, player1_card3, player1_card4]
-        
-            print(f"Player 1 draws 3 unknown cards and draws {player1_card4}!")
-            #("Press enter to continue...")
+        player2_card1, player2_card2, player2_card3, player2_card4 = [deck2.pop(0) for card in range(4)]
+        print(f"Player 2 draws 3 unknown cards and draws {player2_card4}!")
+        input("Press enter to continue...")
 
-            player2_card1, player2_card2, player2_card3, player2_card4 = [deck2.pop(0) for card in range(4)]
-            player2_4cards = [player2_card1, player2_card2, player2_card3, player2_card4]
+        result_war = card_comparison(player1_card4, player2_card4)
 
-            print(f"Player 2 draws 3 unknown cards and draws {player2_card4}!")
-            #("Press enter to continue...")
+        if result_war == 1:
+            deck1.extend([card1, card2, player1_card1, player1_card2, player1_card3, player1_card4, player2_card1, player2_card2, player2_card3, player2_card4])
+            print(f"Since {player1_card4} beats {player2_card4}, player 1 wins and gets all the cards!")
+            time.sleep(2)
+            input("Press enter to continue...")
 
-            result_war = card_comparison(player1_card4, player2_card4)
+        if result_war == 2:
+            deck2.extend([card1, card2, player2_card1, player2_card2, player2_card3, player2_card4, player1_card1, player1_card2, player1_card3, player1_card4])
+            print(f"Since {player2_card4} beats {player1_card4}, player 2 wins and gets all the cards!")
+            time.sleep(0.0001)
+            input("Press enter to continue...")
             
-            if result_war == 1:
-                deck1.append(card1)
-                deck1.append(card2)
-                deck1.extend(player1_4cards, player2_4cards)
 
-                print(f"Since {player1_card4} beats {player2_card4}, player 1 wins and gets all the cards!")
-                #time.sleep(4)
-                #("Press enter to continue...")
-                break
+        if result_war == 0:
+            print("Another draw! Time to do peace again!")
+            input("Press enter to continue...")
+            unassigned_cards = []
+            unassigned_cards.extend([card1, card2, player2_card1, player2_card2, player2_card3, player2_card4, player1_card1, player1_card2, player1_card3, player1_card4])
 
-            if result_war == 2:
-                deck2.append(card1)
-                deck2.append(card2)
-                deck2.extend(player1_4cards, player2_4cards)
+            if len(deck1) < 5 or len(deck2) < 5: # minimum of 4 since it would break the code
+                print("Error 101: the number of cards in either decks are less than 5, cannot initiate war")
+                player1_deck.extend([card1, card2, player1_card1, player1_card2, player1_card3, player1_card4, player2_card1, player2_card2, player2_card3, player2_card4])
+                player2_deck.extend([card1, card2, player2_card1, player2_card2, player2_card3, player2_card4, player1_card1, player1_card2, player1_card3, player1_card4])
 
-                print(f"Since {player2_card4} beats {player1_card4}, player 2 wins and gets all the cards!")
-                #time.sleep(4)
-                #("Press enter to continue...")
-                break
+            else:
+                player1_card1, player1_card2, player1_card3, player1_card4 = [deck1.pop(0) for card in range(4)]
+                print(f"Player 1 draws 3 unknown cards and draws {player1_card4}!")
+                input("Press enter to continue...")
 
-            if result_war == 0:
-                print("Another draw! Time to do peace again!")
-                #("Press enter to continue...")
-                unassigned_cards = []
-                unassigned_cards.append(card1)
-                unassigned_cards.append(card2)
-                unassigned_cards.extend(player1_4cards, player2_4cards)
+                player2_card1, player2_card2, player2_card3, player2_card4 = [deck2.pop(0) for card in range(4)]
+                print(f"Player 2 draws 3 unknown cards and draws {player2_card4}!")
+                input("Press enter to continue...")
+
+                result_war = card_comparison(player1_card4, player2_card4)
+    
+                if result_war == 1:
+                    deck1.extend([unassigned_cards, player1_card1, player1_card2, player1_card3, player1_card4, player2_card1, player2_card2, player2_card3, player2_card4])
+                    print(f"Since {player1_card4} beats {player2_card4}, player 1 wins and gets all the cards!")
+                    time.sleep(2)
+                    input("Press enter to continue...")
+
+                if result_war == 2:
+                    deck2.extend([unassigned_cards, player2_card1, player2_card2, player2_card3, player2_card4, player1_card1, player1_card2, player1_card3, player1_card4])
+                    print(f"Since {player2_card4} beats {player1_card4}, player 1 wins and gets all the cards!")
+                    time.sleep(2)
+                    input("Press enter to continue...")
+
+                if result_war == 0: # i couldve duplicated again but the likelyhood of this happening is so rare the code would look catastropical.
+                                    # i must admit i tried trial and error for hours to try looping to no avail, so imma leave it like this
+                    print("No peace! Back to war!")
+                    input("Press enter to continue...")
+                    print("ERROR")
 
 def play_game(player1_deck, player2_deck):
-    for i in range(1,10000):
+    for _ in range(100000):
         play_round(player1_deck, player2_deck)
-        print(len(player1_deck))
-        print(len(player2_deck))
+        i1 = len(player1_deck)
+        i2 = len(player2_deck)
         if len(player1_deck) == 0:
-            print("It appears that player 1 doesn't have anymore cards!")
+            print(f"It appears that player 1 doesn't have anymore cards! (Player 1's deck has {i1} and player 2's deck has {i2}.)")
             print("Player 2 wins!")
             break
         elif len(player2_deck) == 0:
-            print("It appears that player 2 doesn't have anymore cards!")
+            print(f"It appears that player 2 doesn't have anymore cards! (Player 1's deck has {i1} and player 2's deck has {i2}.)")
             print("Player 1 wins!")
             break
 
 # Call the main function to start the game
 play_game(player1_deck, player2_deck)
-
